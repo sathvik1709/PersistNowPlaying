@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Persist Now Playing</string>
+
+    <string name="song_broadcast_action">com.sathvik1709.action.SONG_RECEIVER</string>
+    <string name="open_notificaitons_prefs_info_1">This app should have access to notifications posted by the phone in order to detect songs.</string>
+    <string name="open_notificaitons_prefs_info_2">Please open notifications access settings by clicking below and grant permission to this app</string>
+
+</resources>
