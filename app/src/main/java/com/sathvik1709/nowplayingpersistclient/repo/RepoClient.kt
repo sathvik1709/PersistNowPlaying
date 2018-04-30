@@ -9,5 +9,6 @@ interface RepoClient {
     fun addNewSongEntity(songEntity: SongEntity)
     fun getLastInertedSong() : SongEntity
     fun updateLastSongTime(songEntity: SongEntity)
+    fun setFavSong(songEntity: SongEntity)
 
 }

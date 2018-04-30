@@ -1,6 +1,7 @@
 package com.sathvik1709.nowplayingpersistclient.activities.archive_acticity
 
 import android.util.Log
+import com.sathvik1709.nowplayingpersistclient.database.SongEntity
 import com.sathvik1709.nowplayingpersistclient.repo.RepoClient
 import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
@@ -31,4 +32,7 @@ class ArchivedListPresenter @Inject constructor(archivedView: ArchivedListContra
         )
     }
 
+    override fun updateSongFav(songEntity: SongEntity) {
+        repoClient.setFavSong(songEntity)
+    }
 }

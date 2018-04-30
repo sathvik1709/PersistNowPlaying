@@ -10,7 +10,8 @@ interface ArchivedListContract {
     }
 
     interface Presenter {
-        fun loadList();
+        fun loadList()
+        fun updateSongFav(songEntity: SongEntity)
     }
 
 }

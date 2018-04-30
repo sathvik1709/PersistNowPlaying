@@ -4,18 +4,25 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import com.sathvik1709.nowplayingpersistclient.R
 import com.sathvik1709.nowplayingpersistclient.database.SongEntity
 import com.sathvik1709.nowplayingpersistclient.util.DateTimeUtil
+import io.reactivex.subjects.PublishSubject
+
+
 
 
 class ArchiveListAdapter(private val songsList : List<SongEntity>, val dateTimeUtil: DateTimeUtil) : RecyclerView.Adapter<ArchiveListAdapter.ViewHolder>() {
+
+    val onClickSubject = PublishSubject.create<SongEntity>()
 
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         var songNameTv = view.findViewById<TextView>(R.id.song_name)
         var albumNameTv = view.findViewById<TextView>(R.id.album_name)
         var timeTv = view.findViewById<TextView>(R.id.time)
+        var favIcon = view.findViewById<ImageView>(R.id.favIcon)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArchiveListAdapter.ViewHolder {
@@ -26,6 +33,16 @@ class ArchiveListAdapter(private val songsList : List<SongEntity>, val dateTimeU
         holder.songNameTv.text = songsList[position].songName
         holder.albumNameTv.text = songsList[position].albumName
         holder.timeTv.text = dateTimeUtil.convertToMainListFormat(songsList[position].time)
+
+        if(songsList[position].isFav){
+            holder.favIcon.setImageResource( R.drawable.ic_fav )
+        }else{
+            holder.favIcon.setImageResource( R.drawable.ic_unfav )
+        }
+
+        holder.favIcon.setOnClickListener {
+            onClickSubject.onNext(songsList[position])
+        }
     }
 
     override fun getItemCount() = songsList.size

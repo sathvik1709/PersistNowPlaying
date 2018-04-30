@@ -24,4 +24,8 @@ class LocalRepoClient @Inject constructor(songsDao: SongsDao) : RepoClient {
     override fun updateLastSongTime(songEntity: SongEntity) {
         songsDao.updateLastSongTime(songEntity)
     }
+
+    override fun setFavSong(songEntity: SongEntity) {
+        songsDao.setFav(songEntity)
+    }
 }

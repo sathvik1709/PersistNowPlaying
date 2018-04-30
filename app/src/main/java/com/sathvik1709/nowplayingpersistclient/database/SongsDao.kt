@@ -22,4 +22,7 @@ interface SongsDao {
     @Update()
     fun updateLastSongTime(song: SongEntity)
 
+    @Update()
+    fun setFav(song: SongEntity)
+
 }
