@@ -4,6 +4,7 @@ import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -18,6 +19,8 @@ import dagger.android.AndroidInjection
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_archived_list.*
 import javax.inject.Inject
+
+
 
 class ArchivedListActivity : AppCompatActivity(), ArchivedListContract.View {
 
@@ -76,6 +79,12 @@ class ArchivedListActivity : AppCompatActivity(), ArchivedListContract.View {
     }
 
     private fun setUpList(songsList : List<SongEntity>) {
+
+        if(archiveRecyclerView.adapter != null){
+            archiveRecyclerView.adapter.notifyDataSetChanged()
+            return
+        }
+
         viewManager = LinearLayoutManager(this)
         viewAdapter = ArchiveListAdapter(songsList, dateTimeUtil)
 
@@ -90,6 +99,7 @@ class ArchivedListActivity : AppCompatActivity(), ArchivedListContract.View {
         archiveRecyclerView.apply {
             layoutManager = viewManager
             adapter = viewAdapter
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
     }
 

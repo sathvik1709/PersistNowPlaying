@@ -32,7 +32,8 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/archive_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layoutAnimation="@anim/layout_animation_fall_down" />
 
     <LinearLayout
         android:id="@+id/no_songs_layout"
@@ -52,15 +53,29 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="akjsdfglkasjdhfglkajh  wefwe f wef wefwe f wef wEF wefwSFASLJNALKSJDHFL K HLKJHLFDKJHASLKDFHLKH LKJHAFL KJHasldkfjh" />
+            android:layout_margin="@dimen/large"
+            android:gravity="center"
+            android:text="There are no songs yet, they appear here as your phone's Now Playing detects songs."
+            android:textColor="@color/primaryColor" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/large"
+            android:gravity="center"
+            android:text="If you havn't turned ON this awesome feature, please click below."
+            android:textColor="@color/primaryColor" />
 
         <Button
             android:id="@+id/goto_now_playing_settings"
+            style="@style/ThemeButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            style="@style/CommonButtonStyle"
-            android:text="Go to settings"/>
+
+            android:text="Go to Now Playing Settings"
+            android:textAllCaps="false"
+            android:textColor="@android:color/background_light" />
 
     </LinearLayout>
 

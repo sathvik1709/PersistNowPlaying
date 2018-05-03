@@ -29,6 +29,7 @@ dependencies {
     def supportLibraryVersion = "27.1.1"
     def archComponentsVersion = "1.0.0"
     def rxAndroidVersion = "2.0.2"
+    def tangoAvatarVersion = "0.0.2"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'joda-time:joda-time:2.9.9'
@@ -45,7 +46,6 @@ dependencies {
     implementation "android.arch.persistence.room:rxjava2:$archComponentsVersion"
     implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
 
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
@@ -60,6 +60,8 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
 
+    // View Libraries
+    compile "agency.tango.android:avatar-view:$tangoAvatarVersion"
 
     implementation 'com.google.code.gson:gson:2.8.2'
 }

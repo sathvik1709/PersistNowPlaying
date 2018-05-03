@@ -1,5 +1,7 @@
 package com.sathvik1709.nowplayingpersistclient.activities.archive_acticity
 
+import agency.tango.android.avatarview.AvatarPlaceholder
+import agency.tango.android.avatarview.views.AvatarView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +25,7 @@ class ArchiveListAdapter(private val songsList : List<SongEntity>, val dateTimeU
         var albumNameTv = view.findViewById<TextView>(R.id.album_name)
         var timeTv = view.findViewById<TextView>(R.id.time)
         var favIcon = view.findViewById<ImageView>(R.id.favIcon)
+        var avatarIcon = view.findViewById<AvatarView>(R.id.avatarView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArchiveListAdapter.ViewHolder {
@@ -33,6 +36,9 @@ class ArchiveListAdapter(private val songsList : List<SongEntity>, val dateTimeU
         holder.songNameTv.text = songsList[position].songName
         holder.albumNameTv.text = songsList[position].albumName
         holder.timeTv.text = dateTimeUtil.convertToMainListFormat(songsList[position].time)
+
+        var avatarPlaceholder : AvatarPlaceholder = AvatarPlaceholder(songsList[position].songName)
+        holder.avatarIcon.setImageDrawable(avatarPlaceholder)
 
         if(songsList[position].isFav){
             holder.favIcon.setImageResource( R.drawable.ic_fav )
