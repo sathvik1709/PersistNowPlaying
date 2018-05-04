@@ -2,6 +2,7 @@ package com.sathvik1709.nowplayingpersistclient.activities.archive_acticity
 
 import agency.tango.android.avatarview.AvatarPlaceholder
 import agency.tango.android.avatarview.views.AvatarView
+import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -16,11 +17,14 @@ import io.reactivex.subjects.PublishSubject
 
 
 
-class ArchiveListAdapter(private val songsList : List<SongEntity>, val dateTimeUtil: DateTimeUtil) : RecyclerView.Adapter<ArchiveListAdapter.ViewHolder>() {
+class ArchiveListAdapter(val songsList : List<SongEntity>, val dateTimeUtil: DateTimeUtil) : RecyclerView.Adapter<ArchiveListAdapter.ViewHolder>() {
 
-    val onClickSubject = PublishSubject.create<SongEntity>()
+    val onFavClicked = PublishSubject.create<SongEntity>()
+    val onViewClicked = PublishSubject.create<SongEntity>()
+
 
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+        var itemContainer = view.findViewById<ConstraintLayout>(R.id.item_container)
         var songNameTv = view.findViewById<TextView>(R.id.song_name)
         var albumNameTv = view.findViewById<TextView>(R.id.album_name)
         var timeTv = view.findViewById<TextView>(R.id.time)
@@ -46,9 +50,15 @@ class ArchiveListAdapter(private val songsList : List<SongEntity>, val dateTimeU
             holder.favIcon.setImageResource( R.drawable.ic_unfav )
         }
 
-        holder.favIcon.setOnClickListener {
-            onClickSubject.onNext(songsList[position])
+        holder.itemContainer.setOnClickListener {
+            onViewClicked.onNext(songsList[position])
         }
+
+        holder.favIcon.setOnClickListener {
+            onFavClicked.onNext(songsList[position])
+        }
+
+        holder
     }
 
     override fun getItemCount() = songsList.size

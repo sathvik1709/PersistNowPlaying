@@ -1,8 +1,10 @@
 package com.sathvik1709.nowplayingpersistclient.activities.archive_acticity
 
+import android.app.SearchManager
 import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -22,6 +24,8 @@ import javax.inject.Inject
 
 
 
+
+
 class ArchivedListActivity : AppCompatActivity(), ArchivedListContract.View {
 
     @Inject
@@ -34,10 +38,11 @@ class ArchivedListActivity : AppCompatActivity(), ArchivedListContract.View {
     lateinit var archiveRecyclerView : RecyclerView
     lateinit var noSongsLayout : LinearLayout
     lateinit var gotoNPSettings : Button
+
     lateinit var recyclerViewOnClickSubject : Disposable
+    lateinit var recyclerViewOnFavClickSubject : Disposable
 
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
-    private lateinit var viewManager: RecyclerView.LayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -81,14 +86,23 @@ class ArchivedListActivity : AppCompatActivity(), ArchivedListContract.View {
     private fun setUpList(songsList : List<SongEntity>) {
 
         if(archiveRecyclerView.adapter != null){
-            archiveRecyclerView.adapter.notifyDataSetChanged()
+            if(songsList.size != archiveRecyclerView.adapter.itemCount){
+                var newViewAdapter = createAdapter(songsList)
+                archiveRecyclerView.swapAdapter(newViewAdapter, false)
+            }else {
+                archiveRecyclerView.adapter.notifyDataSetChanged()
+            }
             return
         }
 
-        viewManager = LinearLayoutManager(this)
-        viewAdapter = ArchiveListAdapter(songsList, dateTimeUtil)
+        archiveRecyclerView.adapter = createAdapter(songsList)
 
-        recyclerViewOnClickSubject = (viewAdapter as ArchiveListAdapter).onClickSubject.subscribe({
+    }
+
+    private fun createAdapter(songsList: List<SongEntity>) : ArchiveListAdapter{
+        var viewAdapter = ArchiveListAdapter(songsList, dateTimeUtil)
+
+        recyclerViewOnFavClickSubject = (viewAdapter as ArchiveListAdapter).onFavClicked.subscribe({
             s ->
             run {
                 s.isFav = !s.isFav
@@ -96,11 +110,22 @@ class ArchivedListActivity : AppCompatActivity(), ArchivedListContract.View {
             }
         })
 
+        recyclerViewOnClickSubject =  (viewAdapter as ArchiveListAdapter).onViewClicked.subscribe({
+            s ->
+            run {
+                val intent = Intent(MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH)
+                intent.putExtra(SearchManager.QUERY, s.songName + " by" + s.albumName)
+                startActivity(intent)
+            }
+        })
+
         archiveRecyclerView.apply {
-            layoutManager = viewManager
+            layoutManager = LinearLayoutManager(context)
             adapter = viewAdapter
             addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
+
+        return viewAdapter
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -109,7 +134,10 @@ class ArchivedListActivity : AppCompatActivity(), ArchivedListContract.View {
 
     override fun onDestroy() {
         super.onDestroy()
-        if(recyclerViewOnClickSubject.isDisposed){
+        if(recyclerViewOnFavClickSubject.isDisposed){
+            recyclerViewOnFavClickSubject.dispose()
+        }
+        if (recyclerViewOnClickSubject.isDisposed){
             recyclerViewOnClickSubject.dispose()
         }
     }
