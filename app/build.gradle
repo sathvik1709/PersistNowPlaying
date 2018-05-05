@@ -33,6 +33,7 @@ dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'joda-time:joda-time:2.9.9'
+    implementation 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
 
     implementation "com.android.support:recyclerview-v7:$supportLibraryVersion"
     implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
@@ -61,7 +62,7 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
 
     // View Libraries
-    compile "agency.tango.android:avatar-view:$tangoAvatarVersion"
+    implementation "agency.tango.android:avatar-view:$tangoAvatarVersion"
 
     implementation 'com.google.code.gson:gson:2.8.2'
 }
