@@ -22,7 +22,6 @@ class AppModule {
     @Provides
     @Singleton
     fun provideDatabase(context : Context) : SongsDatabase = Room.databaseBuilder(context, SongsDatabase::class.java, "songs-db")
-            .allowMainThreadQueries()
             .fallbackToDestructiveMigration()
             .build()
 

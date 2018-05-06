@@ -7,16 +7,18 @@ import com.sathvik1709.nowplayingpersistclient.database.SongEntity
 import com.sathvik1709.nowplayingpersistclient.repo.RepoClient
 import com.sathvik1709.nowplayingpersistclient.util.SongNameUtil
 import dagger.android.AndroidInjection
+import io.reactivex.schedulers.Schedulers
 import org.joda.time.DateTime
 import javax.inject.Inject
 
 
-
 class NowPlayingReceiverService : NotificationListenerService() {
 
-    @Inject lateinit var context : Context
+    @Inject
+    lateinit var context: Context
 
-    @Inject lateinit var localRepoClient: RepoClient
+    @Inject
+    lateinit var localRepoClient: RepoClient
 
     override fun onCreate() {
         AndroidInjection.inject(this);
@@ -24,32 +26,37 @@ class NowPlayingReceiverService : NotificationListenerService() {
     }
 
     override fun onNotificationPosted(notification: StatusBarNotification) {
-       super.onNotificationPosted(notification)
+        super.onNotificationPosted(notification)
 
-        if(notification.packageName == "com.google.intelligence.sense"){
+        if (notification.packageName == "com.google.intelligence.sense") {
             val songNameWithAlbum = notification.notification.extras.getString("android.title")
-            val(songName, albumName) = SongNameUtil().splitSongAndAlbum(songNameWithAlbum)
+            val (songName, albumName) = SongNameUtil().splitSongAndAlbum(songNameWithAlbum)
 
-            if(songName != null || albumName != null){
+            if (songName != null || albumName != null) {
                 val songEntity = SongEntity()
                 songEntity.songName = songName
                 songEntity.albumName = albumName
                 songEntity.isFav = false
                 songEntity.time = getCurrentTimeInMillis()
 
-                val lastSongEntity = localRepoClient.getLastInertedSong()
+                localRepoClient.getLastInertedSong()
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ lastSongEntity ->
+                            run {
+                                if (lastSongEntity == null) {
+                                    localRepoClient.addNewSongEntity(songEntity)
+                                } else {
+                                    if ((songName != lastSongEntity.songName)) {
+                                        localRepoClient.addNewSongEntity(songEntity)
+                                    } else {
 
-                if(lastSongEntity == null){
-                    localRepoClient.addNewSongEntity(songEntity)
-                } else {
-                    if((songName != lastSongEntity.songName)){
-                        localRepoClient.addNewSongEntity(songEntity)
-                    }else{
+                                        lastSongEntity.time = getCurrentTimeInMillis()
+                                        localRepoClient.updateLastSongTime(lastSongEntity)
+                                    }
+                                }
+                            }
+                        })
 
-                        lastSongEntity.time = getCurrentTimeInMillis()
-                        localRepoClient.updateLastSongTime(lastSongEntity)
-                    }
-                }
             }
         }
 

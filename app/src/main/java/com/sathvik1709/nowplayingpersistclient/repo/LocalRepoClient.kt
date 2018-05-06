@@ -3,6 +3,7 @@ package com.sathvik1709.nowplayingpersistclient.repo
 import com.sathvik1709.nowplayingpersistclient.database.SongEntity
 import com.sathvik1709.nowplayingpersistclient.database.SongsDao
 import io.reactivex.Flowable
+import io.reactivex.Single
 import javax.inject.Inject
 
 class LocalRepoClient @Inject constructor(songsDao: SongsDao) : RepoClient {
@@ -17,7 +18,7 @@ class LocalRepoClient @Inject constructor(songsDao: SongsDao) : RepoClient {
         songsDao.insertSong(songEntity)
     }
 
-    override fun getLastInertedSong(): SongEntity {
+    override fun getLastInertedSong(): Single<SongEntity> {
         return songsDao.getLastInsertedSong()
     }
 
