@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/open_notification_access_settings"
+        android:title="Notifications Access Settings"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/open_now_playing_settings"
+        android:title="Now Playing Settings"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/favs_list"
+        android:icon="@drawable/ic_fav"
+        android:title="Favorites"
+        app:showAsAction="always" />
+</menu>

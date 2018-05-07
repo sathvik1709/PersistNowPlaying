@@ -27,4 +27,7 @@ interface SongsDao {
     @Update()
     fun setFav(song: SongEntity)
 
+    @Query("SELECT * FROM songs WHERE is_fav = 1")
+    fun getFavSongsList() : Single<List<SongEntity>>
+
 }

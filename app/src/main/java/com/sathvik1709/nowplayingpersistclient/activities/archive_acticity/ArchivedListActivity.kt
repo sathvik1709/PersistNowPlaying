@@ -1,7 +1,6 @@
 package com.sathvik1709.nowplayingpersistclient.activities.archive_acticity
 
 import android.app.SearchManager
-import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
@@ -9,20 +8,23 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import com.sathvik1709.nowplayingpersistclient.R
+import com.sathvik1709.nowplayingpersistclient.activities.fav_activity.FavsActivity
 import com.sathvik1709.nowplayingpersistclient.activities.no_permission_activity.NoPermissionActivity
 import com.sathvik1709.nowplayingpersistclient.database.SongEntity
 import com.sathvik1709.nowplayingpersistclient.util.DateTimeUtil
 import com.sathvik1709.nowplayingpersistclient.util.RunningServicesUtil
+import com.sathvik1709.nowplayingpersistclient.util.getNotificationsAccessSettings
+import com.sathvik1709.nowplayingpersistclient.util.getNowPlayingSettingsIntent
 import dagger.android.AndroidInjection
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_archived_list.*
 import javax.inject.Inject
-
-
 
 
 
@@ -34,15 +36,12 @@ class ArchivedListActivity : AppCompatActivity(), ArchivedListContract.View {
     @Inject
     lateinit var dateTimeUtil: DateTimeUtil
 
-
     lateinit var archiveRecyclerView : RecyclerView
     lateinit var noSongsLayout : LinearLayout
     lateinit var gotoNPSettings : Button
 
     lateinit var recyclerViewOnClickSubject : Disposable
     lateinit var recyclerViewOnFavClickSubject : Disposable
-
-    private lateinit var viewAdapter: RecyclerView.Adapter<*>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -61,14 +60,8 @@ class ArchivedListActivity : AppCompatActivity(), ArchivedListContract.View {
         }
 
         gotoNPSettings.setOnClickListener {
-            val nowPlayingSettingsIntent = Intent(Intent.ACTION_MAIN)
-            nowPlayingSettingsIntent.component = ComponentName.unflattenFromString(getString(R.string.now_playing_settings_package))
-            nowPlayingSettingsIntent.addCategory(Intent.CATEGORY_LAUNCHER)
-            nowPlayingSettingsIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(nowPlayingSettingsIntent)
+            startActivity(Intent().getNowPlayingSettingsIntent(getString(R.string.now_playing_settings_package)))
         }
-
-        //Toast.makeText(this,RunningServicesUtil().isNLServiceRunning(this).toString(), Toast.LENGTH_LONG).show()
     }
 
     override fun showNoListView() {
@@ -140,6 +133,31 @@ class ArchivedListActivity : AppCompatActivity(), ArchivedListContract.View {
         if (recyclerViewOnClickSubject.isDisposed){
             recyclerViewOnClickSubject.dispose()
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.archive_list_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        when (item.getItemId()) {
+            R.id.open_notification_access_settings -> {
+                startActivity(Intent().getNotificationsAccessSettings())
+                return true
+            }
+            R.id.open_now_playing_settings -> {
+                startActivity(Intent().getNowPlayingSettingsIntent(getString(R.string.now_playing_settings_package)))
+                return true
+            }
+            R.id.favs_list -> {
+                startActivity(Intent(this, FavsActivity::class.java))
+                return true
+            }
+        }
+        return false
     }
 
 }

@@ -33,8 +33,18 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activities.no_permission_activity.NoPermissionActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+        <activity
+            android:name=".activities.no_permission_activity.NoPermissionActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".activities.fav_activity.FavsActivity"
+            android:label="@string/title_activity_favs"
+            android:parentActivityName=".activities.archive_acticity.ArchivedListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.sathvik1709.nowplayingpersistclient.activities.archive_acticity.ArchivedListActivity" />
+        </activity>
     </application>
 
 </manifest>

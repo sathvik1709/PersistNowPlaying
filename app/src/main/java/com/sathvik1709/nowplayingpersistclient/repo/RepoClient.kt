@@ -11,5 +11,6 @@ interface RepoClient {
     fun getLastInertedSong() : Single<SongEntity>
     fun updateLastSongTime(songEntity: SongEntity)
     fun setFavSong(songEntity: SongEntity)
+    fun getFavSongsList() : Single<List<SongEntity>>
 
 }

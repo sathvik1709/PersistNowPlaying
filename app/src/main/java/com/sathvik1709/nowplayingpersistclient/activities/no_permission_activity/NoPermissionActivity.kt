@@ -1,12 +1,11 @@
 package com.sathvik1709.nowplayingpersistclient.activities.no_permission_activity
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.support.v7.app.AppCompatActivity
 import android.widget.Button
 import com.sathvik1709.nowplayingpersistclient.R
+import com.sathvik1709.nowplayingpersistclient.util.getNotificationsAccessSettings
 import kotlinx.android.synthetic.main.activity_no_permission.*
 
 class NoPermissionActivity : AppCompatActivity() {
@@ -22,9 +21,7 @@ class NoPermissionActivity : AppCompatActivity() {
         SkipBtn = skipBtn
 
         notificationsAccessBtn.setOnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                startActivityForResult(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS),343)
-            }
+            startActivityForResult(Intent().getNotificationsAccessSettings(), 321)
         }
 
         SkipBtn.setOnClickListener {

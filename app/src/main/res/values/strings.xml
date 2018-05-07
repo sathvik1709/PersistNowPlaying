@@ -5,5 +5,6 @@
     <string name="open_notificaitons_prefs_info_1">This app should have access to notifications posted by the phone in order to detect songs.</string>
     <string name="open_notificaitons_prefs_info_2">Please open notifications access settings by clicking below and grant permission to this app</string>
     <string name="now_playing_settings_package">com.google.intelligence.sense/.ambientmusic.AmbientMusicSettingsActivity</string>
+    <string name="title_activity_favs">FavsActivity</string>
 
 </resources>
