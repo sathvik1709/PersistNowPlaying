@@ -13,11 +13,10 @@ import com.sathvik1709.nowplayingpersistclient.R
 import com.sathvik1709.nowplayingpersistclient.database.SongEntity
 import com.sathvik1709.nowplayingpersistclient.util.DateTimeUtil
 import io.reactivex.subjects.PublishSubject
+import org.jetbrains.annotations.Nullable
 
 
-
-
-class ArchiveListAdapter(val songsList : List<SongEntity>, val dateTimeUtil: DateTimeUtil) : RecyclerView.Adapter<ArchiveListAdapter.ViewHolder>() {
+class ArchiveListAdapter(val songsList : List<SongEntity>, @Nullable var dateTimeUtil: DateTimeUtil, val showFavIcon : Boolean = true) : RecyclerView.Adapter<ArchiveListAdapter.ViewHolder>() {
 
     val onFavClicked = PublishSubject.create<SongEntity>()
     val onViewClicked = PublishSubject.create<SongEntity>()
@@ -39,26 +38,36 @@ class ArchiveListAdapter(val songsList : List<SongEntity>, val dateTimeUtil: Dat
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.songNameTv.text = songsList[position].songName
         holder.albumNameTv.text = songsList[position].albumName
-        holder.timeTv.text = dateTimeUtil.convertToMainListFormat(songsList[position].time)
+
+        if (dateTimeUtil == null) {
+            holder.timeTv.visibility = View.GONE
+        } else {
+            holder.timeTv.text = dateTimeUtil.convertToMainListFormat(songsList[position].time)
+        }
+
+        if(showFavIcon){
+            if(songsList[position].isFav){
+                holder.favIcon.setImageResource( R.drawable.ic_fav )
+            }else{
+                holder.favIcon.setImageResource( R.drawable.ic_unfav )
+            }
+
+            holder.favIcon.setOnClickListener {
+                onFavClicked.onNext(songsList[position])
+            }
+        } else {
+          holder.favIcon.visibility = View.GONE
+        }
 
         var avatarPlaceholder : AvatarPlaceholder = AvatarPlaceholder(songsList[position].songName)
         holder.avatarIcon.setImageDrawable(avatarPlaceholder)
-
-        if(songsList[position].isFav){
-            holder.favIcon.setImageResource( R.drawable.ic_fav )
-        }else{
-            holder.favIcon.setImageResource( R.drawable.ic_unfav )
-        }
 
         holder.itemContainer.setOnClickListener {
             onViewClicked.onNext(songsList[position])
         }
 
-        holder.favIcon.setOnClickListener {
-            onFavClicked.onNext(songsList[position])
-        }
 
-        holder
+
     }
 
     override fun getItemCount() = songsList.size

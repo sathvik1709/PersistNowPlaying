@@ -127,10 +127,10 @@ class ArchivedListActivity : AppCompatActivity(), ArchivedListContract.View {
 
     override fun onDestroy() {
         super.onDestroy()
-        if(recyclerViewOnFavClickSubject.isDisposed){
+        if(!recyclerViewOnFavClickSubject.isDisposed){
             recyclerViewOnFavClickSubject.dispose()
         }
-        if (recyclerViewOnClickSubject.isDisposed){
+        if (!recyclerViewOnClickSubject.isDisposed){
             recyclerViewOnClickSubject.dispose()
         }
     }
